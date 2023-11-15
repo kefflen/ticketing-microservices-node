@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsnd src/index.ts"
+    "start": "tsnd --poll src/index.ts"
   },
   "keywords": [],
   "author": "",
