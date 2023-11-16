@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import z from 'zod'
+import jwt from 'jsonwebtoken'
 import UserModel from './models/userSchema'
 import { Password } from './utils/password'
 
@@ -31,10 +32,27 @@ const signinSchema = z.object({
   email: z.string().email(),
   password: z.string().min(4).max(20).trim()
 })
-routes.post('/users/signin', (req, res) => {
+routes.post('/users/signin', async (req, res) => {
   const { email, password } = signinSchema.parse(req.body)
 
-  return res.status(200).send('signin')
+  const user = await UserModel.findOne({ email })
+
+  if (!user) {
+    return res.status(400).send('Invalid credentials')
+  }
+
+  const passwordsMatch = await Password.compare(user.password, password)
+  if (!passwordsMatch) {
+    return res.status(400).send('Invalid credentials')
+  }
+
+  const userJwt = jwt.sign({
+    id: user.id, email
+  }, process.env.SECRET_KEY || 'secret')
+
+  return res.status(200).json({
+    user, jwtToken: userJwt
+  })
 })
 
 routes.post('/users/signout', (req, res) => {
