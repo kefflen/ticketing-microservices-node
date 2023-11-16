@@ -15,6 +15,15 @@ spec:
       containers:
       - name: auth
         image: ticketing/auth
+        env:
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: JWT_KEY
+          - name: ENV
+            value: "KUBERNETES"
+
         resources:
           limits:
             memory: "128Mi"
