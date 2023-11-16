@@ -1,13 +1,21 @@
-import { Router } from 'express'
-import z from 'zod'
+import { Request, Response, Router } from 'express'
 import jwt from 'jsonwebtoken'
+import z from 'zod'
 import UserModel from './models/userSchema'
 import { Password } from './utils/password'
+import { authenticated } from './middlewares/authenticated'
 
 const routes = Router()
 
-routes.get('/users/currentuser', (req, res) => {
-  return res.send('currentuser')
+routes.get('/users/currentuser', authenticated, (req: Request, res: Response) => {
+  if (!req.payload!) {
+    throw new Error('Payload must be defined')
+  }
+
+  const { id } = req.payload
+  const user = UserModel.findById(id)
+
+  return res.json(user)
 })
 
 const signupSchema = z.object({
