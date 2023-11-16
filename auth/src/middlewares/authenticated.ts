@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
-function Authenticate(req: Request, res: Response, next: NextFunction) {
+export function authenticated(req: Request, res: Response, next: NextFunction) {
   const [bearer, token] = req.headers.authorization?.split(' ') || []
   if (!bearer || !token) {
     return res.status(401).send('Unauthorized')
@@ -24,5 +24,3 @@ function Authenticate(req: Request, res: Response, next: NextFunction) {
 
   return next()
 }
-
-export default Authenticate
