@@ -24,3 +24,5 @@ function Authenticate(req: Request, res: Response, next: NextFunction) {
 
   return next()
 }
+
+export default Authenticate
