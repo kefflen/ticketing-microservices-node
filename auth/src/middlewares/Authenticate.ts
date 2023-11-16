@@ -21,4 +21,6 @@ function Authenticate(req: Request, res: Response, next: NextFunction) {
   } catch (err) {
     return res.status(401).send('Unauthorized')
   }
+
+  return next()
 }
