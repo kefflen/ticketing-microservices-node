@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import z from 'zod'
 import UserModel from './models/userSchema'
+import { Password } from './utils/password'
 
 const routes = Router()
 
@@ -19,8 +20,8 @@ routes.post('/users/signup', async (req, res) => {
   if (existingUser) {
     return res.status(400).send('Email in use')
   }
-
-  const user = new UserModel({ email, password })
+  const hashedPassword = await Password.toHash(password)
+  const user = new UserModel({ email, password: hashedPassword })
   await user.save()
 
   return res.status(201).json(user)
