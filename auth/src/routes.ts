@@ -64,6 +64,7 @@ routes.post('/users/signin', async (req, res) => {
 })
 
 routes.post('/users/signout', (req, res) => {
+  //TODO: implement logout
   return res.status(204).send()
 })
 
