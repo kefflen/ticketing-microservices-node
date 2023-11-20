@@ -87,7 +87,41 @@ describe('Auth API test suite', () => {
   })
 
   describe('POST /api/users/signin', () => {
+    beforeEach(async () => {
+      await request(app)
+        .post('/api/users/signup')
+        .send(userCredentials)
+        .expect(201)
+    })
 
+    it('fails when a email that does not exist is supplied', async () => {
+      await request(app)
+        .post('/api/users/signin')
+        .send({
+          ...userCredentials,
+          email: 'invalid@email.com'
+        })
+        .expect(400)
+    })
+
+    it('fails when an incorrect password is supplied', async () => {
+      await request(app)
+        .post('/api/users/signin')
+        .send({
+          ...userCredentials,
+          password: 'incorrect'
+        })
+        .expect(400)
+    })
+
+    it('should return jwtToken on successful signin', async () => {
+      const response = await request(app)
+        .post('/api/users/signin')
+        .send(userCredentials)
+        .expect(200)
+      
+      expect(response.body).toHaveProperty('jwtToken')
+    })
   })
 
 
@@ -97,5 +131,9 @@ describe('Auth API test suite', () => {
 
   describe('GET /api/users/currentuser', () => {
 
+  })
+
+  afterAll(async () => {
+    await mongoose.connection.close()
   })
 })
