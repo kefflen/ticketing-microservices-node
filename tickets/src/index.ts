@@ -9,7 +9,7 @@ import routes from './routes'
 const app = express()
 app.use(express.json())
 
-app.use('/api', routes)
+app.use('/api/tickets', routes)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log(err)

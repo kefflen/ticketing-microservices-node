@@ -7,13 +7,13 @@ import { authenticated } from './middlewares/authenticated'
 
 const routes = Router()
 
-routes.get('/users/currentuser', authenticated, (req: Request, res: Response) => {
+routes.get('/users/currentuser', authenticated, async (req: Request, res: Response) => {
   if (!req.payload!) {
     throw new Error('Payload must be defined')
   }
 
   const { id } = req.payload
-  const user = UserModel.findById(id)
+  const user = await UserModel.findById(id)
 
   return res.json(user)
 })

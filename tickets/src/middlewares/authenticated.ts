@@ -8,9 +8,8 @@ type payload = {
 
 export async function authenticated(req: Request, res: Response, next: NextFunction) {
   const authUrl = configs.authUrl
-
   const authorizationHeader = req.headers.authorization
-  if (authorizationHeader) {
+  if (!authorizationHeader) {
     return res.status(401).send('Unauthorized')
   }
 
