@@ -18,4 +18,14 @@ routes.post('/', authenticated, async (req, res) => {
   res.status(201).json(ticket)
 })
 
+routes.get('/:id', async (req, res) => {
+  const ticket = await TicketModel.findById(req.params.id)
+
+  if (!ticket) {
+    return res.status(404).send('Not found')
+  }
+
+  res.json(ticket)
+})
+
 export default routes
