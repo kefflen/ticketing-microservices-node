@@ -29,7 +29,6 @@ describe('Auth API test suite', () => {
   })
   describe('POST /api/users/signup', () => {
     it('should return 201 on successful signup', async () => {
-      console.log('Teste')
       await request(app)
         .post('/api/users/signup')
         .send(userCredentials)
@@ -124,13 +123,37 @@ describe('Auth API test suite', () => {
     })
   })
 
+  describe('GET /api/users/currentuser', () => {
+    let bearerToken: string
+  beforeEach(async () => {
+      await request(app)
+        .post('/api/users/signup')
+        .send(userCredentials)
+        .expect(201)
 
+      const response = await request(app)
+        .post('/api/users/signin')
+        .send(userCredentials)
+        .expect(200)
+  
+      bearerToken = `Bearer ${response.body.jwtToken}`
+    })
+
+    it('should return 401 if not authenticated', async () => {
+      await request(app)
+        .get('/api/users/currentuser')
+        .expect(401)
+    })
+
+    it('should return 200 if authenticated', async () => {
+      await request(app)
+        .get('/api/users/currentuser')
+        .set('Authorization', bearerToken)
+        .expect(200)
+    })
+  })
   describe('POST /api/users/signout', () => {
     it.todo('should logout the user')
-  })
-
-  describe('GET /api/users/currentuser', () => {
-
   })
 
   afterAll(async () => {

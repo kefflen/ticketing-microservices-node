@@ -10,11 +10,12 @@ app.use(express.json())
 app.use('/api', routes)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log(err)
   if (err instanceof ZodError) {
+    console.log(err.issues)
     return res.status(400).json(err.issues)
   }
   
+  console.log(err)
   return res.status(500).json(err)
 })
 
