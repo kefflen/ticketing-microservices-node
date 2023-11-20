@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsnd --poll src/index.ts"
+    "start": "tsnd --poll --transpile-only --ignore-watch node_modules src/index.ts",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

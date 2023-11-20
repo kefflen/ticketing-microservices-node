@@ -34,3 +34,5 @@ const start = async () => {
     () => console.log('Server running at: https://localhost:' + PORT)
   )
 }
+
+start()
