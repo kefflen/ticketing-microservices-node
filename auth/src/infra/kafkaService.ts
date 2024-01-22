@@ -1,6 +1,7 @@
 import { Kafka, Producer, Consumer } from "kafkajs"
 
-export class KafkaService {
+//TODO: create a monorepo so that kafkaService can be imported as a lib from the monorepo
+class KafkaService {
   private kafka: Kafka
   private producer: Producer
   private consumer: Consumer
@@ -46,3 +47,5 @@ export class KafkaService {
     })
   }
 }
+
+export const kafkaService = new KafkaService()
