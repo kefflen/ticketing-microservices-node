@@ -11,6 +11,10 @@ const ticketSchema = new Schema({
     type: Number,
     required: true
   },
+  userId: {
+    type: String,
+    required: true
+  }
 }, {
   toJSON: {
     transform(doc, ret) {

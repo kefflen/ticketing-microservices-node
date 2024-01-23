@@ -2,6 +2,8 @@ import { Router } from "express"
 import zod from 'zod'
 import { authenticated } from "./middlewares/authenticated"
 import TicketModel from "./models/ticketModel"
+import { TicketCreatedPulbisher } from "./events/TicketCreatedPublisher"
+import { kafkaService } from "./infra/kafkaService"
 
 const routes = Router()
 const ticketSchema = zod.object({
@@ -11,9 +13,15 @@ const ticketSchema = zod.object({
 
 routes.post('/', authenticated, async (req, res) => {
   const { title, price } = ticketSchema.parse(req.body)
-
+  
   const ticket = new TicketModel({ title, price })
   await ticket.save()
+  await new TicketCreatedPulbisher(kafkaService).publish({
+    id: ticket.id,
+    title: ticket.title,
+    price: ticket.price,
+    userId: ticket.userId
+  })
 
   res.status(201).json(ticket)
 })
